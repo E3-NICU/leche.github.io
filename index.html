@@ -15,9 +15,9 @@
 <body>
 <section id="app"></section>
 <script type="module">
-    import init, {run_app} from 'static/wasm.js';
+    import init, {run_app} from '/static/wasm.js';
 
-    await init('static/wasm_bg.wasm');
+    await init('/static/wasm_bg.wasm');
     run_app()
 </script>
 
