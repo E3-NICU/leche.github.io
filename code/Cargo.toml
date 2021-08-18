@@ -9,7 +9,7 @@ edition = "2018"
 crate-type = ["cdylib", "rlib"]
 
 [workspace]
-members = ["pbs", "cbs", "spar"]
+members = ["pbs", "cbs"]
 
 [dependencies]
 pbs = { path = "pbs" }
