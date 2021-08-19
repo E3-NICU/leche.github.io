@@ -142,13 +142,23 @@ impl Component for Overview {
                     </Box>
                 </Column>
             </Columns>
-            <cbs::Slider onchange={volume_change} range={5.0..70.0} value={self.volume} steps={100} label={"volume"} postfix={"ml"}/>
+            <cbs::Slider onchange={volume_change} range={5.0..70.0} value={self.volume} steps={100} label={"Volume"} postfix={"ml"}/>
 
-            <cbs::KvButtons<Fridge> onclick={fridge_change} value={self.fridge} alignment={Alignment::Centered} color={Color::Link}/>
-            {fridge_slider}
+            <div class="field p-4">
+                <label class="label"> {"Temperature"} </label>
+                <div class="control">
+                    <cbs::KvButtons<Fridge> onclick={fridge_change} value={self.fridge} alignment={Alignment::Centered} color={Color::Link}/>
+                    {fridge_slider}
+                </div>
+            </div>
 
-            <cbs::KvButtons<Duration> onclick={duration_change} value={self.duration} alignment={Alignment::Centered} color={Color::Link}/>
-            {time_slider}
+            <div class="field p-4">
+                <label class="label"> {"Time of use"} </label>
+                <div class="control">
+                    <cbs::KvButtons<Duration> onclick={duration_change} value={self.duration} alignment={Alignment::Centered} color={Color::Link}/>
+                    {time_slider}
+                </div>
+            </div>
             </>
         }
     }
