@@ -1,9 +1,10 @@
 use yew::prelude::*;
 use pbs::*;
-use crate::Route;
+use crate::Page;
 use yew::utils::window;
 
 pub struct MainFooter {
+    props: Props,
     link: ComponentLink<Self>,
 }
 
@@ -13,12 +14,17 @@ pub enum Msg {
     Info,
 }
 
+#[derive(Properties, Clone)]
+pub struct Props {
+    pub onpage: Callback<Page>,
+}
+
 impl Component for MainFooter {
     type Message = Msg;
-    type Properties = ();
+    type Properties = Props;
 
-    fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
-        Self { link, }
+    fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
+        Self { props, link }
     }
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
@@ -27,10 +33,10 @@ impl Component for MainFooter {
                 window().location().set_href("https://github.com/");
             },
             Msg::Docs => {
-                yew_router::push_route(Route::Docs);
+                self.props.onpage.emit(Page::Docs);
             }
             Msg::Info => {
-                yew_router::push_route(Route::Info);
+                self.props.onpage.emit(Page::Info);
             }
         }
         false

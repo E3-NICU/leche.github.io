@@ -15,20 +15,11 @@ use not_found::NotFound;
 use footer::MainFooter;
 use pbs::*;
 
-#[derive(Routable, PartialEq, Clone, Debug)]
-pub enum Route {
-    #[at("/leche.github.io/info")]
+#[derive(PartialEq, Clone, Debug)]
+pub enum Page {
     Info,
-
-    #[at("/leche.github.io/docs")]
     Docs,
-
-    #[at("/leche.github.io/")]
     Overview,
-
-    #[not_found]
-    #[at("/404")]
-    NotFound,
 }
 
 // Use `wee_alloc` as the global allocator.
@@ -38,14 +29,15 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 pub struct Model {
     link: ComponentLink<Self>,
+    page: Page,
 }
 
 impl Component for Model {
-    type Message = ();
+    type Message = Page;
     type Properties = ();
 
     fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
-        Self { link, }
+        Self { link, page: Page::Overview }
     }
 
     fn update(&mut self, _: Self::Message) -> ShouldRender {
@@ -57,27 +49,24 @@ impl Component for Model {
     }
 
     fn view(&self) -> Html {
+        let page = match self.page {
+            Page::Info => html!{ <Info /> },
+            Page::Docs => html!{ <Docs /> },
+            Page::Overview => html!{ <Overview /> },
+        };
+
         html! {
             <main>
                 <div class="columns is-flex-direction-column" style="height: 100vh">
                     <Section extra="column">
                         <Container>
-                            <Router<Route> render={Router::render(switch)} />
+                            { page }
                         </Container>
                     </Section>
-                    <MainFooter />
+                    <MainFooter onpage={self.link.callback(|x| x)}/>
                 </div>
             </main>
         }
-    }
-}
-
-fn switch(routes: &Route) -> Html {
-    match routes {
-        Route::Info => html!{ <Info /> },
-        Route::Docs => html!{ <Docs /> },
-        Route::Overview => html!{ <Overview /> },
-        Route::NotFound => html!{ <NotFound /> },
     }
 }
 
