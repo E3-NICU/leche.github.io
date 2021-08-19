@@ -14,6 +14,7 @@ use docs::Docs;
 use not_found::NotFound;
 use footer::MainFooter;
 use pbs::*;
+use yew::utils::NeqAssign;
 
 #[derive(PartialEq, Clone, Debug)]
 pub enum Page {
@@ -40,8 +41,8 @@ impl Component for Model {
         Self { link, page: Page::Overview }
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
-        false
+    fn update(&mut self, msg: Self::Message) -> ShouldRender {
+        self.page.neq_assign(msg)
     }
 
     fn change(&mut self, _: Self::Properties) -> ShouldRender {
