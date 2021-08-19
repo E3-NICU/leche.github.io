@@ -22,7 +22,7 @@ impl Component for NotFound {
 
     fn view(&self) -> Html {
         html! {
-            "info"
+            "404 page not found"
         }
     }
 }

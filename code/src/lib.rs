@@ -17,13 +17,13 @@ use pbs::*;
 
 #[derive(Routable, PartialEq, Clone, Debug)]
 pub enum Route {
-    #[at("/info")]
+    #[at("/leche.github.io/info")]
     Info,
 
-    #[at("/docs")]
+    #[at("/leche.github.io/docs")]
     Docs,
 
-    #[at("/")]
+    #[at("/leche.github.io/")]
     Overview,
 
     #[not_found]
