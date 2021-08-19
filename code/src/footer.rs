@@ -30,7 +30,7 @@ impl Component for MainFooter {
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
             Msg::GitHub => {
-                window().location().set_href("https://github.com/");
+                let _ = window().location().set_href("https://github.com/E3-NICU/leche.github.io");
             },
             Msg::Docs => {
                 self.props.onpage.emit(Page::Docs);

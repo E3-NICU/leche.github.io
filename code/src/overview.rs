@@ -1,7 +1,6 @@
 use yew::prelude::*;
 use yew::utils::NeqAssign;
 use pbs::*;
-use std::ops::Range;
 
 use strum_macros::EnumIter;
 use derive_more::Display;

@@ -1,16 +1,23 @@
 use yew::prelude::*;
 use pbs::*;
+use crate::Page;
+
+#[derive(Clone, Properties, PartialEq)]
+pub struct Props {
+    pub onpage: Callback<Page>
+}
 
 pub struct Info {
+    props: Props,
     link: ComponentLink<Self>,
 }
 
 impl Component for Info {
     type Message = ();
-    type Properties = ();
+    type Properties = Props;
 
-    fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
-        Self { link, }
+    fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
+        Self { props, link, }
     }
 
     fn update(&mut self, _: Self::Message) -> ShouldRender {
@@ -22,8 +29,14 @@ impl Component for Info {
     }
 
     fn view(&self) -> Html {
+        let onclick=self.props.onpage.reform(|_| Page::Overview);
         html! {
+            <>
+            <Block>
+                <cbs::IconButton text="Back" icon="fas fa-arrow-left" onclick={onclick} />
+            </Block>
             <Content>
+                <h3> {"This page is still under development"} </h3>
                 <h3> {"Over het project"} </h3>
                 <p> <strong> {"Leche"} </strong> {" is een project dat streeft naar standardisatie van het \
                 opwarmproces van babymelk in de microgolf. Dit wordt bereikt door een simpele hulpapplicatie\
@@ -33,8 +46,9 @@ impl Component for Info {
                 <p> {"De bereking is opgesteld uit honderden experimenten "} </p>
 
                 <h3> {"Interface"} </h3>
-                <p> {"De bereking is opgesteld uit honderden experimenten "} </p>
+                <p> {"De berekening is opgesteld uit honderden experimenten "} </p>
             </Content>
+            </>
         }
     }
 }

@@ -1,18 +1,16 @@
 mod info;
 mod overview;
-mod not_found;
 mod footer;
 mod docs;
 
 use wasm_bindgen::prelude::*;
 use yew::prelude::*;
-use yew_router::prelude::*;
 
 use info::Info;
 use overview::Overview;
 use docs::Docs;
-use not_found::NotFound;
 use footer::MainFooter;
+
 use pbs::*;
 use yew::utils::NeqAssign;
 
@@ -50,9 +48,10 @@ impl Component for Model {
     }
 
     fn view(&self) -> Html {
+        let onpage = self.link.callback(|x| x);
         let page = match self.page {
-            Page::Info => html!{ <Info /> },
-            Page::Docs => html!{ <Docs /> },
+            Page::Info => html!{ <Info onpage={onpage.clone()} /> },
+            Page::Docs => html!{ <Docs onpage={onpage.clone()} /> },
             Page::Overview => html!{ <Overview /> },
         };
 
@@ -64,7 +63,7 @@ impl Component for Model {
                             { page }
                         </Container>
                     </Section>
-                    <MainFooter onpage={self.link.callback(|x| x)}/>
+                    <MainFooter onpage={onpage}/>
                 </div>
             </main>
         }
