@@ -5,8 +5,8 @@ pub use kv_buttons::KvButtons;
 pub use loading::{Loading, MaybeLoading};
 pub use sidebar::{Sidebar, SidebarAlignment};
 pub use simple_field::SimpleField;
-pub use title_hero::TitleHero;
 pub use slider::Slider;
+pub use title_hero::TitleHero;
 
 mod center;
 mod dyn_image;

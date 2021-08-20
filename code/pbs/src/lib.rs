@@ -34,6 +34,7 @@ pub use components::panel::{
     Panel, PanelBlock, PanelBlockProps, PanelProps, PanelTabs, PanelTabsProps,
 };
 pub use components::tabs::{Tabs, TabsProps};
+pub use elements::block::Block;
 // elements
 pub use elements::button::{Button, ButtonProps};
 pub use elements::buttons::{Buttons, ButtonsProps};
@@ -47,7 +48,6 @@ pub use elements::r#box::{Box, BoxProps};
 pub use elements::table::{Table, TableProps};
 pub use elements::tag::{Tag, TagProps, Tags, TagsProps};
 pub use elements::title::{Subtitle, SubtitleProps, Title, TitleProps};
-pub use elements::block::Block;
 // form
 pub use form::checkbox::{Checkbox, CheckboxProps};
 pub use form::control::{Control, ControlProps};

@@ -1,6 +1,6 @@
 use gloo::file::File as SysFile;
-use yew::web_sys::HtmlInputElement;
 use yew::prelude::*;
+use yew::web_sys::HtmlInputElement;
 
 use crate::{Alignment, classify, Color, Size};
 

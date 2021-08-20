@@ -1,7 +1,9 @@
 use yew::prelude::*;
-use pbs::*;
-use crate::Page;
 use yew::utils::window;
+
+use pbs::*;
+
+use crate::Page;
 
 pub struct MainFooter {
     props: Props,
@@ -31,7 +33,7 @@ impl Component for MainFooter {
         match msg {
             Msg::GitHub => {
                 let _ = window().location().set_href("https://github.com/E3-NICU/leche.github.io");
-            },
+            }
             Msg::Docs => {
                 self.props.onpage.emit(Page::Docs);
             }
@@ -53,7 +55,7 @@ impl Component for MainFooter {
                     <Column extra="pr-6">
                         <Title> {"About"}</Title>
                         <Block>
-                            <p style="hyphens:auto"> <strong>{"Leche"} </strong> {" is een project dat streeft naar standardisatie \
+                            <p style="hyphens:auto"> {"Dit is een project dat streeft naar standardisatie \
                             van het opwarmproces van babymelk in de microgolf."} </p>
                         </Block>
                         <Buttons>
@@ -65,7 +67,7 @@ impl Component for MainFooter {
                         <Title> {"Creator"}</Title>
                         <Block>
                             <p style="hyphens:auto"> {"Thomas Dooms is een masterstudent informatica aan UAntwerpen. \
-                            Dit project is gemaakt in kader van het honoursprogramma."} </p>
+                            Als u vragen habt kan ik altijd bereikt worden op mijn e-mail."} </p>
                         </Block>
                         <Block>
                             <Icon icon="fas fa-envelope" text={"thomas@dooms.eu"} />

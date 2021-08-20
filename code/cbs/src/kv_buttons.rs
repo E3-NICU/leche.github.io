@@ -1,10 +1,11 @@
+use std::fmt::Display;
+
+use strum::IntoEnumIterator;
+use strum_macros::EnumIter;
 use yew::prelude::*;
 use yew::utils::NeqAssign;
-use strum_macros::EnumIter;
 
 use pbs::{Alignment, Color};
-use std::fmt::Display;
-use strum::IntoEnumIterator;
 
 #[derive(Clone, Properties, PartialEq)]
 pub struct KvButtonsProps<T: IntoEnumIterator + ToString + Copy + PartialEq + 'static> {
@@ -21,7 +22,7 @@ pub struct KvButtonsProps<T: IntoEnumIterator + ToString + Copy + PartialEq + 's
 
     pub value: T,
 
-    pub onclick: Callback<T>
+    pub onclick: Callback<T>,
 }
 
 pub struct KvButtons<T: IntoEnumIterator + ToString + Copy + PartialEq + 'static> {

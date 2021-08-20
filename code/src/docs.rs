@@ -1,5 +1,7 @@
 use yew::prelude::*;
+
 use pbs::*;
+
 use crate::Page;
 
 pub struct Docs {
@@ -9,7 +11,7 @@ pub struct Docs {
 
 #[derive(Clone, Properties, PartialEq)]
 pub struct Props {
-    pub onpage: Callback<Page>
+    pub onpage: Callback<Page>,
 }
 
 impl Component for Docs {
@@ -29,7 +31,7 @@ impl Component for Docs {
     }
 
     fn view(&self) -> Html {
-        let onclick=self.props.onpage.reform(|_| Page::Overview);
+        let onclick = self.props.onpage.reform(|_| Page::Overview);
         html! {
             <>
             <Block>

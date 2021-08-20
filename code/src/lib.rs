@@ -1,18 +1,19 @@
+use wasm_bindgen::prelude::*;
+use yew::prelude::*;
+use yew::utils::NeqAssign;
+
+use docs::Docs;
+use footer::MainFooter;
+use info::Info;
+use overview::Overview;
+use pbs::*;
+
 mod info;
 mod overview;
 mod footer;
 mod docs;
-
-use wasm_bindgen::prelude::*;
-use yew::prelude::*;
-
-use info::Info;
-use overview::Overview;
-use docs::Docs;
-use footer::MainFooter;
-
-use pbs::*;
-use yew::utils::NeqAssign;
+mod model;
+mod boxes;
 
 #[derive(PartialEq, Clone, Debug)]
 pub enum Page {
@@ -50,9 +51,9 @@ impl Component for Model {
     fn view(&self) -> Html {
         let onpage = self.link.callback(|x| x);
         let page = match self.page {
-            Page::Info => html!{ <Info onpage={onpage.clone()} /> },
-            Page::Docs => html!{ <Docs onpage={onpage.clone()} /> },
-            Page::Overview => html!{ <Overview /> },
+            Page::Info => html! { <Info onpage={onpage.clone()} /> },
+            Page::Docs => html! { <Docs onpage={onpage.clone()} /> },
+            Page::Overview => html! { <Overview /> },
         };
 
         html! {

@@ -1,33 +1,36 @@
-use yew::prelude::*;
-use yew::web_sys::HtmlInputElement;
-use yew::utils::NeqAssign;
-
-use pbs::Color;
+use std::fmt::Display;
 use std::ops::Range;
 use std::rc::Rc;
 
-#[derive(Clone, Properties, PartialEq)]
-pub struct SliderProps {
-    pub onchange: Callback<f64>,
+use num::{FromPrimitive, ToPrimitive};
+use yew::prelude::*;
+use yew::utils::NeqAssign;
+use yew::web_sys::HtmlInputElement;
 
-    pub range: Range<f64>,
-    pub value: f64,
+use pbs::Color;
+
+// maybe use num crate to define the trait bounds
+#[derive(Clone, PartialEq, Properties)]
+pub struct SliderProps<T: PartialEq + Clone + Display + FromPrimitive + ToPrimitive + 'static> {
+    pub onchange: Callback<T>,
+
+    pub range: Range<T>,
+    pub value: T,
+
     pub steps: u64,
-    pub label: String,
 
-    // TODO: make this a generic function
-    // #[prop_or_default]
+    #[prop_or_default]
     pub postfix: String,
 }
 
-pub struct Slider {
-    props: SliderProps,
+pub struct Slider<T: PartialEq + Clone + Display + FromPrimitive + ToPrimitive + 'static> {
+    props: SliderProps<T>,
     link: ComponentLink<Self>,
 }
 
-impl Component for Slider {
+impl<T: PartialEq + Clone + Display + FromPrimitive + ToPrimitive + 'static> Component for Slider<T> {
     type Message = String;
-    type Properties = SliderProps;
+    type Properties = SliderProps<T>;
 
     fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
         Self { props, link }
@@ -42,33 +45,29 @@ impl Component for Slider {
     }
 
     fn view(&self) -> Html {
-        let SliderProps{value, range, steps, label, postfix, ..} = self.props.clone();
+        let SliderProps { value, range, steps, postfix, .. } = self.props.clone();
+        let (start, end) = (range.start.to_f64().unwrap(), range.end.to_f64().unwrap());
 
-        let percent = 100.0 * (value - range.start) / (range.end - range.start);
+        let percent = 100.0 * (value.to_f64().unwrap() - start) / (end - start);
         let style = format!("position:absolute;left:calc({}% + {}px)", percent, 12.0 - 0.23 * percent);
 
-        let min = range.start.to_string();
-        let max = range.end.to_string();
-        let step = ((range.end - range.start) as f64 / steps as f64).to_string();
+        let min = start.to_string();
+        let max = end.to_string();
+        let step = ((end - start) / (steps as f64)).to_string();
 
         let oninput = self.props.onchange.reform(|e: InputEvent| {
-            e.target_unchecked_into::<HtmlInputElement>().value_as_number()
+            T::from_f64(e.target_unchecked_into::<HtmlInputElement>().value_as_number()).unwrap()
         });
 
-        let bubble = format!("{:.0} {}", value, postfix);
-
         html! {
-            <div class="field p-4">
-                <label class="label"> {label} </label>
-                <div class="control">
-                    <input class="slider" min={min} max={max} step={step} type="range" value={value.to_string()} oninput={oninput} />
-                    <p class="slider-label-top" style={style}> {bubble} </p>
-                    <div class="is-flex is-justify-content-space-between">
-                        <p>{range.start}</p>
-                        <p>{range.end}</p>
-                    </div>
-                </div>
+            <>
+            <input class="slider" min={min} max={max} step={step} type="range" value={value.to_string()} oninput={oninput} />
+            <p class="slider-label-top" style={style}> {format!("{:.0} {}", value, postfix)} </p>
+            <div class="is-flex is-justify-content-space-between">
+                <p>{start}</p>
+                <p>{end}</p>
             </div>
+            </>
         }
     }
 }

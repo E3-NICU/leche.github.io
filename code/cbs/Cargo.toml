@@ -12,6 +12,7 @@ yew = { git = "https://github.com/yewstack/yew.git" }
 yew-router = { git = "https://github.com/yewstack/yew.git" }
 
 derive_more = "0.99.16"
+num = "0.4"
 
 strum = "*"
 strum_macros = "*"

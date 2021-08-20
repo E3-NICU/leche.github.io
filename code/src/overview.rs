@@ -1,14 +1,23 @@
+use std::ops::Range;
+use std::rc::Rc;
+
+use derive_more::Display;
+use strum_macros::EnumIter;
 use yew::prelude::*;
 use yew::utils::NeqAssign;
+
 use pbs::*;
 
-use strum_macros::EnumIter;
-use derive_more::Display;
+use crate::boxes::Boxes;
+use crate::model::exec_model;
 
-const SECOND_EST: f64 = 2.1892;
-const VOLUME_EST: f64 = -0.4125;
-const INTERCEPT: f64 = 12.2044;
-const TARGET_TEMP: f64 = 32.0;
+const TEMP_RANGE: Range<u64> = 0..25;
+const VOLUME_RANGE: Range<u64> = 5..70;
+const TIME_RANGE: Range<u64> = 0..10;
+
+const TEMP_STEPS: u64 = TEMP_RANGE.end - TEMP_RANGE.start;
+const VOLUME_STEPS: u64 = VOLUME_RANGE.end - VOLUME_RANGE.start;
+const TIME_STEPS: u64 = TIME_RANGE.end - TIME_RANGE.start;
 
 pub struct Overview {
     link: ComponentLink<Self>,
@@ -16,18 +25,19 @@ pub struct Overview {
     fridge: Fridge,
     duration: Duration,
 
-    volume: f64,
-    temp: f64,
-    time: f64,
+    volume: u64,
+    temp: u64,
+    time: u64,
 }
 
+#[derive(Debug)]
 pub enum Msg {
     Fridge(Fridge),
     Duration(Duration),
 
-    Volume(f64),
-    Temp(f64),
-    Time(f64),
+    Volume(u64),
+    Temp(u64),
+    Time(u64),
 }
 
 #[derive(Clone, Debug, PartialEq, Copy, EnumIter, Display)]
@@ -55,7 +65,7 @@ impl Component for Overview {
     type Properties = ();
 
     fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
-        Self { link, fridge: Fridge::Fridge, duration: Duration::Immediately, volume: 40.0, temp: 9.0, time: 3.0 }
+        Self { link, fridge: Fridge::Fridge, duration: Duration::Immediately, volume: 40, temp: 9, time: 3 }
     }
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
@@ -65,15 +75,15 @@ impl Component for Overview {
             Msg::Time(time) => self.time.neq_assign(time),
             Msg::Fridge(fridge) => {
                 self.temp = match fridge {
-                    Fridge::Fridge => 9.0,
-                    Fridge::Synthetic => 7.0,
-                    Fridge::Room => 24.0,
-                    Fridge::Measured => 9.0
+                    Fridge::Fridge => 9,
+                    Fridge::Synthetic => 7,
+                    Fridge::Room => 24,
+                    Fridge::Measured => 9
                 };
                 self.fridge.neq_assign(fridge)
             }
             Msg::Duration(duration) => {
-                self.time = 3.0;
+                self.time = 3;
                 self.duration.neq_assign(duration)
             }
         }
@@ -90,14 +100,14 @@ impl Component for Overview {
         let fridge_change = self.link.callback(Msg::Fridge);
         let duration_change = self.link.callback(Msg::Duration);
 
-        let seconds = (TARGET_TEMP - self.temp - INTERCEPT - VOLUME_EST * self.volume) / SECOND_EST;
-        let rounded = seconds.round();
-
-        let expected = INTERCEPT + SECOND_EST * rounded + VOLUME_EST * self.volume + self.temp;
 
         let fridge_slider = match self.fridge {
             Fridge::Measured => html! {
-                <cbs::Slider onchange={temp_change} range={0.0..25.0} value={self.temp} steps={100} label={"milk temperature"} postfix={"°C"}/>
+                <div class="field p-4">
+                    <div class="control">
+                        <cbs::Slider<u64> onchange={temp_change} range={TEMP_RANGE} value={self.temp} steps={TEMP_STEPS} postfix={"°C"} />
+                    </div>
+                </div>
             },
             _ => html! {}
         };
@@ -105,59 +115,44 @@ impl Component for Overview {
         let time_slider = match self.duration {
             Duration::Immediately => html! {},
             Duration::Later => html! {
-                <cbs::Slider onchange={time_change} range={0.0..10.0} value={self.time} steps={100} label={"time"} postfix={"min"}/>
+                <div class="field p-4">
+                    <div class="control">
+                        <cbs::Slider<u64> onchange={time_change} range={TIME_RANGE} value={self.time} steps={TIME_STEPS} postfix={"min"} />
+                    </div>
+                </div>
             }
         };
 
         html! {
             <>
-            <Columns>
-                <Column>
-                    <Box>
-                        <Content>
-                        <b class="is-size-3"> {"Time"} </b>
-                        <p class="is-size-3"> {rounded.to_string()} <span class="has-text-grey"> {" seconds"} </span> </p>
-                        </Content>
-                    </Box>
-                </Column>
-                <Column>
-                    <Box>
-                        <Content>
-                        <b class="is-size-3"> {"Power"} </b>
-                        <p class="is-size-3">{"360"} <span class="has-text-grey"> {" Watt"} </span> </p>
-                        </Content>
-                    </Box>
-                </Column>
-                <Column>
-                    <Box>
-                        <b class="is-size-3"> {"Estimate"} </b>
-                        <p class="is-size-3">
-                            { format!("{:.1}", expected - 2.0) }
-                            <span class="has-text-grey"> {"°C"} </span>
-                            {" - "}
-                            { format!("{:.1}", expected + 2.0) }
-                            <span class="has-text-grey"> {"°C"} </span>
-                        </p>
-                    </Box>
-                </Column>
-            </Columns>
-            <cbs::Slider onchange={volume_change} range={5.0..70.0} value={self.volume} steps={100} label={"Volume"} postfix={"ml"}/>
+            <Boxes model={exec_model(self.volume, self.temp, self.time)} />
+
+            <div class="py-5"> </div>
+
+            <div class="field p-4">
+                <label class="label"> {"Volume"} </label>
+                <div class="control">
+                    <cbs::Slider<u64> onchange={volume_change} range={VOLUME_RANGE} value={self.volume} steps={VOLUME_STEPS} postfix={"ml"} />
+                </div>
+            </div>
 
             <div class="field p-4">
                 <label class="label"> {"Temperature"} </label>
                 <div class="control">
                     <cbs::KvButtons<Fridge> onclick={fridge_change} value={self.fridge} alignment={Alignment::Centered} color={Color::Link}/>
-                    {fridge_slider}
                 </div>
             </div>
+
+            {fridge_slider}
 
             <div class="field p-4">
                 <label class="label"> {"Time of use"} </label>
                 <div class="control">
                     <cbs::KvButtons<Duration> onclick={duration_change} value={self.duration} alignment={Alignment::Centered} color={Color::Link}/>
-                    {time_slider}
                 </div>
             </div>
+            {time_slider}
+
             </>
         }
     }

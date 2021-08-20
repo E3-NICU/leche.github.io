@@ -1,10 +1,12 @@
 use yew::prelude::*;
+
 use pbs::*;
+
 use crate::Page;
 
 #[derive(Clone, Properties, PartialEq)]
 pub struct Props {
-    pub onpage: Callback<Page>
+    pub onpage: Callback<Page>,
 }
 
 pub struct Info {
@@ -17,7 +19,7 @@ impl Component for Info {
     type Properties = Props;
 
     fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
-        Self { props, link, }
+        Self { props, link }
     }
 
     fn update(&mut self, _: Self::Message) -> ShouldRender {
@@ -29,7 +31,7 @@ impl Component for Info {
     }
 
     fn view(&self) -> Html {
-        let onclick=self.props.onpage.reform(|_| Page::Overview);
+        let onclick = self.props.onpage.reform(|_| Page::Overview);
         html! {
             <>
             <Block>

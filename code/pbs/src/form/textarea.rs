@@ -1,6 +1,6 @@
 use yew::prelude::*;
-use yew::web_sys::HtmlInputElement;
 use yew::utils::NeqAssign;
+use yew::web_sys::HtmlInputElement;
 
 use crate::{Color, Size};
 use crate::classify;
