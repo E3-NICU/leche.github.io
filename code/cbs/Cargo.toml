@@ -8,8 +8,8 @@ edition = "2018"
 [dependencies]
 pbs = { path = "../pbs" }
 
-yew = { git = "https://github.com/yewstack/yew.git" }
-yew-router = { git = "https://github.com/yewstack/yew.git" }
+yew = { git = "https://github.com/yewstack/yew.git", rev = "1474c0a2826e870319d103883f7b7b45c84b4eb8" }
+
 
 derive_more = "0.99.16"
 num = "0.4"

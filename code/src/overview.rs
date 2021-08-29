@@ -1,5 +1,4 @@
 use std::ops::Range;
-use std::rc::Rc;
 
 use derive_more::Display;
 use strum_macros::EnumIter;
@@ -11,13 +10,23 @@ use pbs::*;
 use crate::boxes::Boxes;
 use crate::model::exec_model;
 
+// Change these values to have different min and max for the sliders
 const TEMP_RANGE: Range<u64> = 0..25;
 const VOLUME_RANGE: Range<u64> = 5..70;
 const TIME_RANGE: Range<u64> = 0..10;
 
+// Do not change these, these indicate the steps on their respective slider slider
 const TEMP_STEPS: u64 = TEMP_RANGE.end - TEMP_RANGE.start;
 const VOLUME_STEPS: u64 = VOLUME_RANGE.end - VOLUME_RANGE.start;
 const TIME_STEPS: u64 = TIME_RANGE.end - TIME_RANGE.start;
+
+const FRIDGE_DEFAULT: u64 = 9;
+const SYNTHETIC_DEFAULT: u64 = 7;
+const ROOM_DEFAULT: u64 = 23;
+
+const VOLUME_INITIAL: u64 = 40;
+const MEASURED_INITIAL: u64 = 9;
+const LATER_INITIAL: u64 = 3;
 
 pub struct Overview {
     link: ComponentLink<Self>,
@@ -65,7 +74,14 @@ impl Component for Overview {
     type Properties = ();
 
     fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
-        Self { link, fridge: Fridge::Fridge, duration: Duration::Immediately, volume: 40, temp: 9, time: 3 }
+        Self {
+            link,
+            fridge: Fridge::Fridge,
+            duration: Duration::Immediately,
+            volume: VOLUME_INITIAL,
+            temp: MEASURED_INITIAL,
+            time: LATER_INITIAL,
+        }
     }
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
@@ -75,15 +91,15 @@ impl Component for Overview {
             Msg::Time(time) => self.time.neq_assign(time),
             Msg::Fridge(fridge) => {
                 self.temp = match fridge {
-                    Fridge::Fridge => 9,
-                    Fridge::Synthetic => 7,
-                    Fridge::Room => 24,
-                    Fridge::Measured => 9
+                    Fridge::Fridge => FRIDGE_DEFAULT,
+                    Fridge::Synthetic => SYNTHETIC_DEFAULT,
+                    Fridge::Room => ROOM_DEFAULT,
+                    Fridge::Measured => MEASURED_INITIAL,
                 };
                 self.fridge.neq_assign(fridge)
             }
             Msg::Duration(duration) => {
-                self.time = 3;
+                self.time = LATER_INITIAL;
                 self.duration.neq_assign(duration)
             }
         }
@@ -100,7 +116,6 @@ impl Component for Overview {
         let fridge_change = self.link.callback(Msg::Fridge);
         let duration_change = self.link.callback(Msg::Duration);
 
-
         let fridge_slider = match self.fridge {
             Fridge::Measured => html! {
                 <div class="field p-4">
@@ -109,7 +124,7 @@ impl Component for Overview {
                     </div>
                 </div>
             },
-            _ => html! {}
+            _ => html! {},
         };
 
         let time_slider = match self.duration {
@@ -120,7 +135,7 @@ impl Component for Overview {
                         <cbs::Slider<u64> onchange={time_change} range={TIME_RANGE} value={self.time} steps={TIME_STEPS} postfix={"min"} />
                     </div>
                 </div>
-            }
+            },
         };
 
         html! {
@@ -142,7 +157,6 @@ impl Component for Overview {
                     <cbs::KvButtons<Fridge> onclick={fridge_change} value={self.fridge} alignment={Alignment::Centered} color={Color::Link}/>
                 </div>
             </div>
-
             {fridge_slider}
 
             <div class="field p-4">
@@ -152,7 +166,6 @@ impl Component for Overview {
                 </div>
             </div>
             {time_slider}
-
             </>
         }
     }

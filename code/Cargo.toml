@@ -20,8 +20,7 @@ wasm-logger = "0.2"
 wasm-bindgen = "0.2"
 wee_alloc = "0.4"
 
-yew = { git = "https://github.com/yewstack/yew.git" }
-yew-agent = { git = "https://github.com/yewstack/yew.git" }
+yew = { git = "https://github.com/yewstack/yew.git", rev = "1474c0a2826e870319d103883f7b7b45c84b4eb8" }
 
 strum = "*"
 strum_macros = "*"

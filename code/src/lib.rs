@@ -7,6 +7,7 @@ use footer::MainFooter;
 use info::Info;
 use overview::Overview;
 use pbs::*;
+use yew::web_sys::window;
 
 mod info;
 mod overview;
@@ -26,6 +27,10 @@ pub enum Page {
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
+pub enum Msg {
+    Page(Page),
+    External(String)
+}
 
 pub struct Model {
     link: ComponentLink<Self>,
@@ -33,7 +38,7 @@ pub struct Model {
 }
 
 impl Component for Model {
-    type Message = Page;
+    type Message = Msg;
     type Properties = ();
 
     fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
@@ -41,7 +46,13 @@ impl Component for Model {
     }
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
-        self.page.neq_assign(msg)
+        match msg {
+            Msg::Page(page) => self.page.neq_assign(page),
+            Msg::External(url) => {
+                let _ = window().unwrap().location().set_href(&url);
+                false
+            }
+        }
     }
 
     fn change(&mut self, _: Self::Properties) -> ShouldRender {
@@ -49,7 +60,8 @@ impl Component for Model {
     }
 
     fn view(&self) -> Html {
-        let onpage = self.link.callback(|x| x);
+        let onpage = self.link.callback(Msg::Page);
+
         let page = match self.page {
             Page::Info => html! { <Info onpage={onpage.clone()} /> },
             Page::Docs => html! { <Docs onpage={onpage.clone()} /> },
@@ -64,7 +76,7 @@ impl Component for Model {
                             { page }
                         </Container>
                     </Section>
-                    <MainFooter onpage={onpage}/>
+                    <MainFooter onpage={onpage} onexternal={self.link.callback(Msg::External)}/>
                 </div>
             </main>
         }
