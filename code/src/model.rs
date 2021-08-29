@@ -28,7 +28,7 @@ pub fn exec_model(volume: u64, start: u64, time: u64) -> ModelResult {
     let index = if volume < 20 { 1usize } else { 0 };
 
     // Calculate the difference accounting for temperature decline over time
-    let difference = TARGET - (start as f64) + time * DECAY;
+    let difference = TARGET - (start as f64) + (time as f64) * DECAY;
 
     // The exact calculation of seconds
     let seconds = (difference - INTERCEPT[index] - VOLUME[index] * (volume as f64)) / SECONDS[index];
@@ -37,10 +37,10 @@ pub fn exec_model(volume: u64, start: u64, time: u64) -> ModelResult {
     let rounded = seconds.round();
 
     // Calculate the expected value based on the rounded seconds
-    let expected = INTERCEPT + SECONDS[index] * rounded + VOLUME[index] * (volume as f64) + (start as f64);
+    let expected = INTERCEPT[index] + SECONDS[index] * rounded + VOLUME[index] * (volume as f64) + (start as f64);
 
     // For now the error is just a flat range depending on the model
     let estimate = (expected - ERROR[index])..(expected + ERROR[index]);
 
-    ModelResult { seconds: rounded as u64, estimate, watt }
+    ModelResult { seconds: rounded as u64, estimate, watt: WATT[index] }
 }
