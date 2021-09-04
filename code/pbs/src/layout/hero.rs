@@ -1,10 +1,10 @@
 use yew::prelude::*;
-use yew::utils::NeqAssign;
 
-use crate::{Color, HeroSize};
+use crate::properties::{Color, HeroSize};
+use crate::utils::enclose;
 
 #[derive(Clone, Debug, Properties, PartialEq)]
-pub struct HeroProps {
+pub struct Props {
     /// Extra classes for the hero container.
     #[prop_or_default]
     pub extra: String,
@@ -19,7 +19,7 @@ pub struct HeroProps {
     pub header: Option<Html>,
 
     #[prop_or_default]
-    pub body: Option<Html>,
+    pub children: Children,
 
     #[prop_or_default]
     pub footer: Option<Html>,
@@ -28,54 +28,15 @@ pub struct HeroProps {
 /// An imposing hero banner to showcase something.
 ///
 /// [https://bulma.io/documentation/layout/hero/](https://bulma.io/documentation/layout/hero/)
-pub struct Hero {
-    props: HeroProps,
-}
+#[function_component(Hero)]
+pub fn hero(props: &Props) -> Html {
+    let classes = classes!("hero", props.size, props.color, &props.extra);
 
-impl Component for Hero {
-    type Message = ();
-    type Properties = HeroProps;
-
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props }
-    }
-
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
-        false
-    }
-
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
-    }
-
-    fn view(&self) -> Html {
-        let classes = classes!(
-            "hero",
-            self.props.size.as_ref().map(ToString::to_string),
-            self.props.color.as_ref().map(ToString::to_string),
-            &self.props.extra
-        );
-
-        // TODO: fix code duplication
-        let header = match &self.props.header {
-            Some(html) => html! { <div class="hero-header"> {html.clone()} </div> },
-            None => html! {},
-        };
-
-        let body = match &self.props.body {
-            Some(html) => html! { <div class="hero-body"> {html.clone()} </div> },
-            None => html! {},
-        };
-
-        let footer = match &self.props.footer {
-            Some(html) => html! { <div class="hero-footer"> {html.clone()} </div> },
-            None => html! {},
-        };
-
-        html! {
-            <section class={classes}>
-                {header} {body} {footer}
-            </section>
-        }
+    html! {
+        <section class={classes}>
+            { enclose("hero-header", props.header.clone()) }
+            <div class="hero-body"> { for props.children.iter() } </div>
+            { enclose("hero-footer", props.footer.clone()) }
+        </section>
     }
 }

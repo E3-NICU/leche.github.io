@@ -1,11 +1,11 @@
-use gloo::file::File as SysFile;
 use yew::prelude::*;
+use yew::web_sys;
 use yew::web_sys::HtmlInputElement;
 
-use crate::{Alignment, classify, Color, Size};
+use crate::properties::{Alignment, Boxed, Color, Fullwidth, Size};
 
-#[derive(Properties, Clone)]
-pub struct FileProps {
+#[derive(Properties, Clone, PartialEq)]
+pub struct Props {
     #[prop_or_default]
     pub size: Size,
 
@@ -13,7 +13,7 @@ pub struct FileProps {
     pub color: Option<Color>,
 
     #[prop_or_default]
-    pub fullwidth: bool,
+    pub fullwidth: Fullwidth,
 
     #[prop_or_default]
     pub filename: Option<String>,
@@ -22,7 +22,7 @@ pub struct FileProps {
     pub accept: Option<String>,
 
     #[prop_or_default]
-    pub boxed: bool,
+    pub boxed: Boxed,
 
     #[prop_or_default]
     pub alignment: Alignment,
@@ -30,71 +30,44 @@ pub struct FileProps {
     #[prop_or_default]
     pub extra: String,
 
-    // We don't use gloo_file filelist because it
-    // doesn't allow to move from it for some reason.
-    pub onupload: Callback<Vec<SysFile>>,
+    pub onupload: Callback<Vec<web_sys::File>>,
 }
 
-pub struct File {
-    link: ComponentLink<Self>,
-    props: FileProps,
-}
+#[function_component(File)]
+pub fn file(props: &Props) -> Html {
+    let maybe_file = || match &props.filename {
+        None => html! {},
+        Some(file) => html! {<span class="file-name"> {file} </span>},
+    };
 
-impl Component for File {
-    type Message = ();
-    type Properties = FileProps;
+    let classes = classes!(
+        "file",
+        props.filename.as_ref().map(|_| "has-name"),
+        props.boxed,
+        props.fullwidth,
+        props.alignment,
+        &props.extra
+    );
 
-    fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
-        Self { props, link }
-    }
+    let onchange = props.onupload.reform(|e: Event| {
+        let files = e.target_unchecked_into::<HtmlInputElement>().files().unwrap();
+        (0..files.length()).filter_map(|i| files.get(i)).collect()
+    });
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
-        false
-    }
-
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props = props;
-        true
-    }
-
-    fn view(&self) -> Html {
-        let maybe_file = || match &self.props.filename {
-            None => html! {},
-            Some(file) => html! {<span class="file-name"> {file} </span>},
-        };
-
-        let FileProps { boxed, fullwidth, .. } = self.props;
-        let maybe_name = self.props.filename.as_ref().map(|_| "has-name");
-        let accept = self.props.accept.clone();
-
-        let classes = classes!(
-            "file",
-            classify!(fullwidth, boxed),
-            maybe_name,
-            self.props.alignment.to_string(),
-            &self.props.extra
-        );
-
-        let onchange = self.props.onupload.reform(|e: Event| {
-            let files = e.target_unchecked_into::<HtmlInputElement>().files().unwrap();
-            (0..files.length()).filter_map(|i| files.get(i)).map(SysFile::from).collect()
-        });
-
-        html! {
-            <div class={classes}>
-                <label class="file-label">
-                <input class="file-input" type="file" accept={accept} onchange={onchange} />
-                <span class="file-cta">
-                    <span class="file-icon">
-                    <i class="fas fa-upload"></i>
-                    </span>
-                    <span class="file-label">
-                        {"Choose a file..."}
-                    </span>
+    html! {
+        <div class={classes}>
+            <label class="file-label">
+            <input class="file-input" type="file" accept={props.accept.clone()} onchange={onchange} />
+            <span class="file-cta">
+                <span class="file-icon">
+                <i class="fas fa-upload"></i>
                 </span>
-                    { maybe_file() }
-                </label>
-            </div>
-        }
+                <span class="file-label">
+                    {"Choose a file..."}
+                </span>
+            </span>
+                { maybe_file() }
+            </label>
+        </div>
     }
 }

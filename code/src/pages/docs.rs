@@ -1,6 +1,6 @@
 use yew::prelude::*;
 
-use pbs::*;
+use pbs::prelude::*;
 
 use crate::Page;
 
@@ -15,7 +15,7 @@ pub fn docs(props: &Props) -> Html {
     html! {
         <>
         <Block>
-            <cbs::IconButton text="Back" icon="fas fa-arrow-left" onclick={onclick} />
+            <Button onclick={onclick}> <Icon icon="fas fa-arrow-left"/> <span> {"Back"} </span> </Button>
         </Block>
         <Content>
             <h3> {"This page is still under development"} </h3>

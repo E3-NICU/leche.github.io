@@ -1,20 +1,15 @@
 use wasm_bindgen::prelude::*;
 use yew::prelude::*;
-use yew::utils::NeqAssign;
-
-use docs::Docs;
-use footer::MainFooter;
-use info::Info;
-use overview::Overview;
-use pbs::*;
 use yew::web_sys::window;
 
-mod info;
-mod overview;
-mod footer;
-mod docs;
-mod model;
-mod boxes;
+use components::MainFooter;
+use pages::{Docs, Info, Overview};
+use pbs::prelude::*;
+
+mod models;
+mod constants;
+mod components;
+mod pages;
 
 #[derive(PartialEq, Clone, Debug)]
 pub enum Page {
@@ -29,11 +24,10 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 pub enum Msg {
     Page(Page),
-    External(String)
+    External(String),
 }
 
 pub struct Model {
-    link: ComponentLink<Self>,
     page: Page,
 }
 
@@ -41,13 +35,16 @@ impl Component for Model {
     type Message = Msg;
     type Properties = ();
 
-    fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
-        Self { link, page: Page::Overview }
+    fn create(_: &Context<Self>) -> Self {
+        Self { page: Page::Overview }
     }
 
-    fn update(&mut self, msg: Self::Message) -> ShouldRender {
+    fn update(&mut self, _: &Context<Self>, msg: Self::Message) -> bool {
         match msg {
-            Msg::Page(page) => self.page.neq_assign(page),
+            Msg::Page(page) => {
+                self.page = page;
+                true
+            }
             Msg::External(url) => {
                 let _ = window().unwrap().location().set_href(&url);
                 false
@@ -55,12 +52,9 @@ impl Component for Model {
         }
     }
 
-    fn change(&mut self, _: Self::Properties) -> ShouldRender {
-        false
-    }
-
-    fn view(&self) -> Html {
-        let onpage = self.link.callback(Msg::Page);
+    fn view(&self, ctx: &Context<Self>) -> Html {
+        let onpage = ctx.link().callback(Msg::Page);
+        let onexternal = ctx.link().callback(Msg::External);
 
         let page = match self.page {
             Page::Info => html! { <Info onpage={onpage.clone()} /> },
@@ -76,7 +70,7 @@ impl Component for Model {
                             { page }
                         </Container>
                     </Section>
-                    <MainFooter onpage={onpage} onexternal={self.link.callback(Msg::External)}/>
+                    <MainFooter onpage={onpage} onexternal={onexternal}/>
                 </div>
             </main>
         }

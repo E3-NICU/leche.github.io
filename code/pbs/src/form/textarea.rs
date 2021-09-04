@@ -1,12 +1,10 @@
 use yew::prelude::*;
-use yew::utils::NeqAssign;
 use yew::web_sys::HtmlInputElement;
 
-use crate::{Color, Size};
-use crate::classify;
+use crate::properties::{Color, FixedSize, Loading, Size, Static};
 
 #[derive(Clone, Debug, Properties, PartialEq)]
-pub struct TextAreaProps {
+pub struct Props {
     /// The `name` attribute for this form element.
     #[prop_or_default]
     pub name: Option<String>,
@@ -39,11 +37,11 @@ pub struct TextAreaProps {
 
     /// Fix the size of this component.
     #[prop_or_default]
-    pub fixed: bool,
+    pub fixed: FixedSize,
 
     /// Display a loading spinner within this component.
     #[prop_or_default]
-    pub loading: bool,
+    pub loading: Loading,
 
     /// Disable this component.
     #[prop_or_default]
@@ -55,58 +53,36 @@ pub struct TextAreaProps {
 
     /// Make this component static.
     #[prop_or_default]
-    pub r#static: bool,
+    pub r#static: Static,
 }
 
 /// A multiline textarea component.
 ///
 /// [https://bulma.io/documentation/form/textarea/](https://bulma.io/documentation/form/textarea/)
-pub struct TextArea {
-    props: TextAreaProps,
-    link: ComponentLink<Self>,
-}
+#[function_component(Textarea)]
+pub fn textarea(props: &Props) -> Html {
+    let classes = classes!(
+        "textarea",
+        &props.extra,
+        props.color,
+        props.size,
+        props.loading,
+        props.r#static,
+        props.fixed
+    );
+    let oninput =
+        props.oninput.reform(|e: InputEvent| e.target_unchecked_into::<HtmlInputElement>().value());
 
-impl Component for TextArea {
-    type Message = ();
-    type Properties = TextAreaProps;
-
-    fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
-        Self { props, link }
-    }
-
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
-        false
-    }
-
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
-    }
-
-    fn view(&self) -> Html {
-        let TextAreaProps { loading, r#static, .. } = self.props;
-
-        let classes = classes!(
-            "textarea",
-            &self.props.extra,
-            self.props.color.as_ref().map(ToString::to_string),
-            self.props.size.to_string(),
-            classify!(loading, r#static),
-            self.props.fixed.then(|| "has-fixed-size")
-        );
-
-        let oninput = self.props.oninput.reform(|e: InputEvent| e.target_unchecked_into::<HtmlInputElement>().value());
-
-        html! {
-            <textarea
-                name={self.props.name.clone()}
-                value={self.props.value.clone()}
-                oninput={oninput}
-                class={classes}
-                rows={self.props.rows.as_ref().map(ToString::to_string)}
-                placeholder={self.props.placeholder.clone()}
-                disabled={self.props.disabled}
-                readonly={self.props.readonly}
-                />
-        }
+    html! {
+        <textarea
+            name={props.name.clone()}
+            value={props.value.clone()}
+            oninput={oninput}
+            class={classes}
+            rows={props.rows.as_ref().map(ToString::to_string)}
+            placeholder={props.placeholder.clone()}
+            disabled={props.disabled}
+            readonly={props.readonly}
+            />
     }
 }

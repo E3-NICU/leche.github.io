@@ -1,14 +1,11 @@
-use std::fmt::Display;
-
 use strum::IntoEnumIterator;
-use strum_macros::EnumIter;
 use yew::prelude::*;
-use yew::utils::NeqAssign;
 
-use pbs::{Alignment, Color};
+use pbs::prelude::*;
+use pbs::properties::{Alignment, Color};
 
 #[derive(Clone, Properties, PartialEq)]
-pub struct KvButtonsProps<T: IntoEnumIterator + ToString + Copy + PartialEq + 'static> {
+pub struct Props<T: IntoEnumIterator + ToString + Copy + PartialEq + 'static> {
     #[prop_or_default]
     pub children: Children,
 
@@ -25,45 +22,27 @@ pub struct KvButtonsProps<T: IntoEnumIterator + ToString + Copy + PartialEq + 's
     pub onclick: Callback<T>,
 }
 
-pub struct KvButtons<T: IntoEnumIterator + ToString + Copy + PartialEq + 'static> {
-    props: KvButtonsProps<T>,
-    link: ComponentLink<Self>,
-}
+#[function_component(KvButtons)]
+pub fn kv_buttons<T: IntoEnumIterator + ToString + Copy + PartialEq + 'static>(
+    props: &Props<T>,
+) -> Html {
+    let button_map = |variant: T| {
+        // Do not compare by value but by discriminant
+        let selected = std::mem::discriminant(&props.value) == std::mem::discriminant(&variant);
 
-impl<T: IntoEnumIterator + ToString + Copy + PartialEq + 'static> Component for KvButtons<T> {
-    type Message = ();
-    type Properties = KvButtonsProps<T>;
-
-    fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
-        Self { props, link }
-    }
-
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
-        false
-    }
-
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
-    }
-
-    fn view(&self) -> Html {
-        let button_map = |variant: T| {
-            let selected = self.props.value == variant;
-            let color = selected.then(|| self.props.color);
-
-            let onclick = self.props.onclick.reform(move |_| variant);
-
-            html! {
-                <pbs::Button color={color} onclick={onclick} selected={selected}>
-                    {variant.to_string()}
-                </pbs::Button>
-            }
-        };
+        let color = selected.then(|| props.color);
+        let onclick = props.onclick.reform(move |_| variant);
 
         html! {
-            <pbs::Buttons addons=true alignment={self.props.alignment}>
-                { for T::iter().map(button_map) }
-            </pbs::Buttons>
+            <Button color={color} onclick={onclick} selected={selected}>
+                {variant.to_string()}
+            </Button>
         }
+    };
+
+    html! {
+        <Buttons addons=true alignment={props.alignment}>
+            { for T::iter().map(button_map) }
+        </Buttons>
     }
 }

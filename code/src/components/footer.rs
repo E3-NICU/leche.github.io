@@ -1,6 +1,6 @@
 use yew::prelude::*;
 
-use pbs::*;
+use pbs::prelude::*;
 
 use crate::Page;
 
@@ -26,18 +26,18 @@ pub fn footer(props: &Props) -> Html {
         <Footer extra="column is-narrow pb-3">
             <Columns>
                 <Column extra="pr-6">
-                    <Title> {"About"}</Title>
+                    <Title> {"Over het project"}</Title>
                     <Block>
                         <p style="hyphens:auto"> {"Dit is een pilootproject dat streeft naar standardisatie \
                         van het opwarmproces van babymelk in de microgolf."} </p>
                     </Block>
                     <Buttons>
-                        <cbs::IconButton icon="fab fa-github" text="GitHub" onclick={ongithub} />
-                        <cbs::IconButton icon="fas fa-align-left" text="docs" onclick={ondocs}/>
+                        <Button onclick={ongithub}> <Icon icon="fab fa-github"/> <span> {"Github"} </span> </Button>
+                        <Button onclick={ondocs}> <Icon icon="fas fa-align-left"/> <span> {"docs"} </span> </Button>
                     </Buttons>
                 </Column>
                 <Column extra="pr-6">
-                    <Title> {"Creator"}</Title>
+                    <Title> {"Ontwikkelaar"}</Title>
                     <Block>
                         <p style="hyphens:auto"> {"Thomas Dooms is een masterstudent informatica aan UAntwerpen. \
                         Als u vragen hebt kan u deze altijd sturen naar op mijn e-mail."} </p>
@@ -53,7 +53,7 @@ pub fn footer(props: &Props) -> Html {
                          opwarmproces en functionaliteit van deze hulpsite kan u hier vinden."} </p>
                     </Block>
                     <Block>
-                        <cbs::IconButton icon="fas fa-question" text="info" onclick={oninfo}/>
+                        <Button onclick={oninfo}> <Icon icon="fas fa-question"/> <span> {"info"} </span> </Button>
                     </Block>
                 </Column>
             </Columns>
