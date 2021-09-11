@@ -10,7 +10,8 @@
   "files": [
     "wasm_bg.wasm",
     "wasm.js",
-    "wasm.d.ts"
+    "wasm.d.ts",
+    "LICENSE-MIT"
   ],
   "module": "wasm.js",
   "types": "wasm.d.ts",
