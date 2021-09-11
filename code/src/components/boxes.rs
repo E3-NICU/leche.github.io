@@ -1,6 +1,6 @@
 use yew::prelude::*;
 
-use pbs::prelude::*;
+use cobul::*;
 
 use crate::models::ModelResult;
 

@@ -4,7 +4,7 @@ use yew::web_sys::window;
 
 use components::MainFooter;
 use pages::{Docs, Info, Overview};
-use pbs::prelude::*;
+use cobul::*;
 
 mod models;
 mod constants;

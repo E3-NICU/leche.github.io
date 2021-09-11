@@ -1,7 +1,7 @@
 use yew::prelude::*;
 
-use pbs::prelude::*;
-use pbs::properties::ColumnSize;
+use cobul::*;
+use cobul::props::{ColumnSize, Color};
 
 use crate::Page;
 
@@ -17,7 +17,7 @@ pub fn info(props: &Props) -> Html {
         <Columns>
             <Column size={ColumnSize::Is6}>
                 <Block>
-                    <Button onclick={onclick}> <Icon icon="fas fa-arrow-left"/> <span> {"Back"} </span> </Button>
+                    <Button onclick={onclick}> <Icon icon="fas fa-arrow-left"/> <span> {"Terug"} </span> </Button>
                 </Block>
                 <Content>
                     <h3> {"Over het project"} </h3>
@@ -31,8 +31,12 @@ pub fn info(props: &Props) -> Html {
                     uit de koelkast met synthetische melk of op kamertemperatuur is. "} </p>
 
                     <p class="has-text-justified"> {"Indien de melk uit de koelkast warmer lijkt dan gewoonlijk, kan men \
-                    best even de reëele temperatuur opmeten met een infrarood sensor en deze waarde ingeven onder 'gemeten'. Voor deze meting is het cruciaal dat het \
-                    oppervlak van de spuit niet aangeraakt wordt, aangezien dit het resultaat sterk beïnvloed. "} </p>
+                    best even de reëele temperatuur opmeten met een infrarood sensor en deze waarde ingeven onder 'gemeten'."} </p>
+
+                    <Message color={Color::Warning}>
+                        {"Voor deze meting is het cruciaal dat het oppervlak van de spuit niet aangeraakt wordt, \
+                        aangezien dit het resultaat sterk beïnvloed."}
+                    </Message>
 
                     <p class="has-text-justified"> {"De locatie van de spuit in de microgolf is enorm belangrijk. Dit programma gaat ervan uit \
                     dat het centrum van de melk (niet de spuit) in het midden van de microgolf ligt. \

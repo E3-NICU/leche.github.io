@@ -1,2 +1,2 @@
 [workspace]
-members = ["code", "spar", "code/pbs", "code/cbs"]
+members = ["code"]

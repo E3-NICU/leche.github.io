@@ -2,8 +2,8 @@ use derive_more::Display;
 use strum::EnumIter;
 use yew::prelude::*;
 
-use cbs::{KvButtons, Slider};
-use pbs::properties::{Alignment, Color};
+use cobul::{EnumButtons, Slider};
+use cobul::props::{Alignment, Color};
 
 use crate::constants::{FRIDGE_DEFAULT, MEASURED_INITIAL, ROOM_DEFAULT, SYNTHETIC_DEFAULT, TEMP_RANGE, TEMP_STEPS};
 
@@ -51,7 +51,7 @@ pub fn temperature_select(props: &Props) -> Html {
         Temperature::Measured(Measured(value)) => html! {
             <div class="field p-4">
                 <div class="control">
-                    <cbs::Slider<u64> onchange={onslider} range={TEMP_RANGE} value={value} steps={TEMP_STEPS} postfix={"°C"} />
+                    <Slider<u64> onchange={onslider} range={TEMP_RANGE} value={value} steps={TEMP_STEPS} postfix={"°C"} />
                 </div>
             </div>
         },
@@ -63,7 +63,7 @@ pub fn temperature_select(props: &Props) -> Html {
         <div class="field p-4">
             <label class="label"> {"Temperatuur"} </label>
             <div class="control">
-                <KvButtons<Temperature> onclick={props.onchange.clone()} value={props.value} alignment={Alignment::Centered} color={Color::Link}/>
+                <EnumButtons<Temperature> onclick={props.onchange.clone()} value={props.value} alignment={Alignment::Centered} color={Color::Link}/>
             </div>
         </div>
         {slider}

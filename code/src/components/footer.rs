@@ -1,14 +1,8 @@
 use yew::prelude::*;
 
-use pbs::prelude::*;
+use cobul::*;
 
 use crate::Page;
-
-pub enum Msg {
-    GitHub,
-    Docs,
-    Info,
-}
 
 #[derive(Properties, Clone, PartialEq)]
 pub struct Props {
@@ -39,11 +33,14 @@ pub fn footer(props: &Props) -> Html {
                 <Column extra="pr-6">
                     <Title> {"Ontwikkelaar"}</Title>
                     <Block>
-                        <p style="hyphens:auto"> {"Thomas Dooms is een masterstudent informatica aan UAntwerpen. \
-                        Als u vragen hebt kan u deze altijd sturen naar op mijn e-mail."} </p>
+                        <p style="hyphens:auto"> {"Ik ben een masterstudent informatica aan UAntwerpen. \
+                        Als u vragen hebt over deze applicatie kan u deze altijd sturen naar mijn e-mail."} </p>
                     </Block>
                     <Block>
-                        <Icon icon="fas fa-envelope" text={"thomas@dooms.eu"} />
+                        <IconText>
+                            <Icon icon="fas fa-envelope"/>
+                            {"thomas@dooms.eu"}
+                        </IconText>
                     </Block>
                 </Column>
                 <Column extra="pr-6">

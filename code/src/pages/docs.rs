@@ -1,6 +1,6 @@
 use yew::prelude::*;
 
-use pbs::prelude::*;
+use cobul::*;
 
 use crate::Page;
 
@@ -15,10 +15,10 @@ pub fn docs(props: &Props) -> Html {
     html! {
         <>
         <Block>
-            <Button onclick={onclick}> <Icon icon="fas fa-arrow-left"/> <span> {"Back"} </span> </Button>
+            <Button onclick={onclick}> <Icon icon="fas fa-arrow-left"/> <span> {"Terug"} </span> </Button>
         </Block>
         <Content>
-            <h3> {"This page is still under development"} </h3>
+            <h3> {"Deze pagina is nog niet afgewerkt."} </h3>
         </Content>
         </>
     }

@@ -1,7 +1,6 @@
 use yew::prelude::*;
 
-use cbs::Slider;
-use pbs::prelude::*;
+use cobul::*;
 
 use crate::components::{Boxes, Duration, DurationSelect, Temperature, TemperatureSelect};
 use crate::constants::{VOLUME_INITIAL, VOLUME_RANGE, VOLUME_STEPS};

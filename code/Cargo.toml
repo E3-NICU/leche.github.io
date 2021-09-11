@@ -9,8 +9,7 @@ edition = "2018"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-pbs = { path = "pbs" }
-cbs = { path = "cbs" }
+cobul = { git = "https://github.com/tdooms/cobul.git", features = ["custom"] }
 
 log = "0.4"
 wasm-logger = "0.2"

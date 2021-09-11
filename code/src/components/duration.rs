@@ -2,8 +2,8 @@ use derive_more::Display;
 use strum::EnumIter;
 use yew::prelude::*;
 
-use cbs::{KvButtons, Slider};
-use pbs::properties::{Alignment, Color};
+use cobul::*;
+use cobul::props::{Alignment, Color};
 
 use crate::constants::{IMMEDIATELY_DEFAULT, LATER_INITIAL, WAIT_RANGE, WAIT_STEPS};
 
@@ -43,23 +43,23 @@ pub fn duration_select(props: &Props) -> Html {
 
     let slider = match props.value {
         Duration::Later(Later(value)) => html! {
-            <div class="field p-4">
-                <div class="control">
-                    <cbs::Slider<u64> onchange={onslider} range={WAIT_RANGE} value={value} steps={WAIT_STEPS} postfix={" min"} />
-                </div>
-            </div>
+            <Field extra="p-4">
+                <Control>
+                    <Slider<u64> onchange={onslider} range={WAIT_RANGE} value={value} steps={WAIT_STEPS} postfix={" min"} />
+                </Control>
+            </Field>
         },
         _ => html! {},
     };
 
     html! {
         <>
-        <div class="field p-4">
-            <label class="label"> {"Tijd van gebruik"} </label>
-            <div class="control">
-                <KvButtons<Duration> onclick={props.onchange.clone()} value={props.value} alignment={Alignment::Centered} color={Color::Link}/>
-            </div>
-        </div>
+        <Field extra="p-4">
+            <Label> {"Tijd van gebruik"} </Label>
+            <Control>
+                <EnumButtons<Duration> onclick={props.onchange.clone()} value={props.value} alignment={Alignment::Centered} color={Color::Link}/>
+            </Control>
+        </Field>
         {slider}
         </>
     }
