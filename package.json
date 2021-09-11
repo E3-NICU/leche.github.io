@@ -1,6 +1,12 @@
 {
   "name": "leche",
+  "description": "A tool for warming milk in a medical context",
   "version": "0.1.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/E3-NICU/leche.github.io"
+  },
   "files": [
     "wasm_bg.wasm",
     "wasm.js",

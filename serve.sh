@@ -1,0 +1,1 @@
+~/.cargo/bin/miniserve -p 8765 .

@@ -2,21 +2,21 @@
 name = "leche"
 version = "0.1.0"
 edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+description = "A tool for warming milk in a medical context"
+repository = "https://github.com/E3-NICU/leche.github.io"
+license = "MIT"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 cobul = { git = "https://github.com/tdooms/cobul.git", features = ["custom"] }
+yew = { git = "https://github.com/yewstack/yew.git", rev = "4e974dad9282eb765738394b8ee6c6a7d9baa2d9" }
 
 log = "0.4"
+wee_alloc = "0.4"
 wasm-logger = "0.2"
 wasm-bindgen = "0.2"
-wee_alloc = "0.4"
-
-yew = { git = "https://github.com/yewstack/yew.git", rev = "4e974dad9282eb765738394b8ee6c6a7d9baa2d9" }
 
 strum = { version = "0.21", features = ["derive"] }
 derive_more = "0.99.16"
