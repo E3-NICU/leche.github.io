@@ -51,8 +51,8 @@ pub fn info(props: &Props) -> Html {
 
                     <Message color={Color::Danger}>
                         {"Hoewel deze applicatie goed getest is, kunnen subtiele \
-                        veranderingen zorgen voor veel te warme of koude melk. \
-                        Vergeet dus zeker niet om de temperatuur nog eens aan te voelen na gebruik\
+                        veranderingen zorgen voor te warme of koude melk. \
+                        Vergeet dus zeker niet om de temperatuur nog eens aan te voelen na gebruik \
                         en te vertrouwen op je intuïtie."}
                     </Message>
 
