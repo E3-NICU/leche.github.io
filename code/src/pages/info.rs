@@ -43,13 +43,30 @@ pub fn info(props: &Props) -> Html {
                     Indien dit niet gaat, zorg dan zeker dat de volledige spuit op de draaiplaat past \
                     aangezien deze anders blijft hangen tegen de rand en de resultaten beïnvloedt."} </p>
 
-                    <h3> {"Accuraatheid"} </h3>
-                    <p class="has-text-justified"> {"Een schatting van de temperatuur wordt gegeven bij elke verandering van de parameters."} </p>
-                    <p class="has-text-justified"> {"De berekening van het opwarmen zelf is accuraat tot ±2 graden, \
-                    de grootste variatie komt door het verschil van temperatuur uit de koelkast."} </p>
+                    <Message color={Color::Warning}>
+                        {"Het is steeds essentieel om goed te schudden na het opwarmen."}
+                    </Message>
 
-                    <p class="has-text-justified"> {"Kleine volumes zijn minder accuraat omdat hier meerdere factoren een rol spelen \
-                     die moeilijk te meten zijn. Daarom zal de aangegeven spreiding groter zijn."} </p>
+                    <h3> {"Accuraatheid"} </h3>
+
+                    <Message color={Color::Danger}>
+                        {"Hoewel deze applicatie goed getest is, kunnen subtiele \
+                        veranderingen zorgen voor veel te warme of koude melk. \
+                        Vergeet dus zeker niet om de temperatuur nog eens aan te voelen na gebruik\
+                        en te vertrouwen op je intuïtie."}
+                    </Message>
+
+                    <p class="has-text-justified">
+                        {"Een schatting van de temperatuur wordt gegeven bij elke \
+                        verandering van de parameters."}
+                    </p>
+
+                    <p class="has-text-justified">
+                        {"De berekening van het opwarmen zelf is accuraat tot ±2 graden, \
+                        de grootste variatie komt door het verschil van temperatuur uit de koelkast. \
+                        Kleine volumes zijn minder accuraat omdat hier meerdere factoren een rol spelen \
+                        die moeilijk te meten zijn. Daarom zal de aangegeven spreiding groter zijn."}
+                    </p>
 
                     <h3> {"Toekomst"} </h3>
                     <p class="has-text-justified"> {"Er zijn nog verschillende ideeën en optimalisaties die onderzocht kunnen worden."}</p>

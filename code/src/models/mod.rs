@@ -3,4 +3,5 @@ pub use linear::LinearModel;
 
 mod base;
 mod linear;
+mod future;
 

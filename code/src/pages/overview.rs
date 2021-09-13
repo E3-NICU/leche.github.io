@@ -47,6 +47,7 @@ impl Component for Overview {
         let temp_change = ctx.link().callback(Msg::Start);
         let time_change = ctx.link().callback(Msg::Wait);
 
+        // Change this line to whichever model you want
         let model = LinearModel::default();
         let result = model.calc(self.volume, self.start.into(), self.wait.into());
 

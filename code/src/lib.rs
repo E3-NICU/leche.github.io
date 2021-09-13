@@ -3,7 +3,7 @@ use yew::prelude::*;
 use yew::web_sys::window;
 
 use components::MainFooter;
-use pages::{Docs, Info, Overview};
+use pages::*;
 use cobul::*;
 
 mod models;
@@ -14,7 +14,6 @@ mod pages;
 #[derive(PartialEq, Clone, Debug)]
 pub enum Page {
     Info,
-    Docs,
     Overview,
 }
 
@@ -58,7 +57,6 @@ impl Component for Model {
 
         let page = match self.page {
             Page::Info => html! { <Info onpage={onpage.clone()} /> },
-            Page::Docs => html! { <Docs onpage={onpage.clone()} /> },
             Page::Overview => html! { <Overview /> },
         };
 

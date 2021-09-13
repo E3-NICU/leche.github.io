@@ -13,7 +13,6 @@ pub struct Props {
 #[function_component(MainFooter)]
 pub fn footer(props: &Props) -> Html {
     let ongithub = props.onexternal.reform(|_| "https://github.com/E3-NICU/leche.github.io".to_owned());
-    let ondocs = props.onpage.reform(|_| Page::Docs);
     let oninfo = props.onpage.reform(|_| Page::Info);
 
     html! {
@@ -27,19 +26,24 @@ pub fn footer(props: &Props) -> Html {
                     </Block>
                     <Buttons>
                         <Button onclick={ongithub}> <Icon icon="fab fa-github"/> <span> {"Github"} </span> </Button>
-                        <Button onclick={ondocs}> <Icon icon="fas fa-align-left"/> <span> {"docs"} </span> </Button>
                     </Buttons>
                 </Column>
                 <Column extra="pr-6">
                     <Title> {"Ontwikkelaar"}</Title>
                     <Block>
-                        <p style="hyphens:auto"> {"Ik ben een masterstudent informatica aan UAntwerpen. \
-                        Als u vragen hebt over deze applicatie kan u deze altijd sturen naar mijn e-mail."} </p>
+                        <p style="hyphens:auto">
+                            {"Deze applicatie is ontwikkelt door Thomas Dooms, een masterstudent informatica aan UAntwerpen."}
+                            {"Indien u vragen heeft over de website, kan u terecht bij:"}
+                        </p>
                     </Block>
                     <Block>
                         <IconText>
                             <Icon icon="fas fa-envelope"/>
-                            {"thomas@dooms.eu"}
+                            {"charlie.beirnaert@uantwerpen.be"}
+                        </IconText>
+                        <IconText>
+                            <Icon icon="fas fa-envelope"/>
+                            {"ludo.mahieu@uza.be"}
                         </IconText>
                     </Block>
                 </Column>
