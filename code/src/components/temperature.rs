@@ -18,8 +18,8 @@ impl Default for Measured {
 pub enum Temperature {
     #[display(fmt = "Koelkast")]
     Fridge,
-    #[display(fmt = "Synthetisch")]
-    Synthetic,
+    // #[display(fmt = "Synthetisch")]
+    // Synthetic,
     #[display(fmt = "Kamertemperatuur")]
     Room,
     #[display(fmt = "Gemeten")]
@@ -30,7 +30,7 @@ impl From<Temperature> for u64 {
     fn from(temperature: Temperature) -> Self {
         match temperature {
             Temperature::Fridge => FRIDGE_DEFAULT,
-            Temperature::Synthetic => SYNTHETIC_DEFAULT,
+            // Temperature::Synthetic => SYNTHETIC_DEFAULT,
             Temperature::Room => ROOM_DEFAULT,
             Temperature::Measured(x) => x.0
         }

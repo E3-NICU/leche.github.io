@@ -21,10 +21,11 @@ pub fn footer(props: &Props) -> Html {
                 <Column extra="pr-6">
                     <Title> {"Over het project"}</Title>
                     <Block>
-                        <p style="hyphens:auto"> {"Dit is een pilootproject dat streeft naar standardisatie \
-                        van het opwarmproces van babymelk in de microgolf."} </p>
+                         <p style="hyphens:auto"> {"Dit is een pilootproject dat streeft naar standardisatie \
+                        van het opwarmproces van babymelk in de microgolf. Extra uitleg bij de site vindt u hier."} </p>
                     </Block>
                     <Buttons>
+                        <Button onclick={oninfo}> <Icon icon="fas fa-question"/> <span> {"info"} </span> </Button>
                         <Button onclick={ongithub}> <Icon icon="fab fa-github"/> <span> {"Github"} </span> </Button>
                     </Buttons>
                 </Column>
@@ -33,28 +34,22 @@ pub fn footer(props: &Props) -> Html {
                     <Block>
                         <p style="hyphens:auto">
                             {"Deze applicatie is ontwikkelt door Thomas Dooms, een masterstudent informatica aan UAntwerpen."}
-                            {"Indien u vragen heeft over de website, kan u terecht bij:"}
                         </p>
                     </Block>
+                </Column>
+                <Column extra="pr-6">
+                    <Title> {"Contact"}</Title>
                     <Block>
                         <IconText>
                             <Icon icon="fas fa-envelope"/>
                             {"charlie.beirnaert@uantwerpen.be"}
                         </IconText>
+                    </Block>
+                    <Block>
                         <IconText>
                             <Icon icon="fas fa-envelope"/>
                             {"ludo.mahieu@uza.be"}
                         </IconText>
-                    </Block>
-                </Column>
-                <Column extra="pr-6">
-                    <Title> {"Info"}</Title>
-                    <Block>
-                         <p style="hyphens:auto"> {"Meer info over dit project en uitleg bij de bij het \
-                         opwarmproces en functionaliteit van deze hulpsite kan u hier vinden."} </p>
-                    </Block>
-                    <Block>
-                        <Button onclick={oninfo}> <Icon icon="fas fa-question"/> <span> {"info"} </span> </Button>
                     </Block>
                 </Column>
             </Columns>
